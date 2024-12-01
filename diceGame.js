@@ -74,13 +74,19 @@ class GameSetup {
       process.exit();
     }
     args.map(arg => {
-        if (arg.split(',').length != 6) {
-          console.log("Dice sets need to have exactly 6 faces");
-          process.exit();
-        } else if (isNaN(arg))
-          console.log("One of the arguments it's not a number");
-          process.exit();
-    })
+      const faces = arg.split(',').map(face => face.trim());
+
+      if (faces.length !== 6) {
+        console.log("Dice sets need to have exactly 6 faces");
+        process.exit();
+      }
+
+      if (faces.some(face => isNaN(face) || face === "")) {
+        console.log("One of the dice sets contains an invalid number");
+        console.log(`Invalid set: ${arg}`);
+        process.exit();
+      }
+    });
     return args.map((arg) => arg.split(",").map((face) => parseInt(face.trim(), 10)));
   }
 }
